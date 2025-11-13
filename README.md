@@ -22,7 +22,7 @@ An intelligent email management system that uses AI to help you draft, send, ana
 - **AI Model**: Mistral AI API
 - **Email API**: Gmail API (Google)
 - **Authentication**: OAuth2
-- **Frontend**: HTML/CSS/JavaScript
+- **Frontend**: HTML/CSS/JavaScript/Python
 - **Data**: Pandas (Excel/CSV handling)
 - **Containerization**: Docker (optional)
 
