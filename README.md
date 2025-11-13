@@ -57,6 +57,11 @@ pip install -r requirements.txt
 4. Create OAuth 2.0 credentials (Desktop app)
 5. Download credentials as `credentials.json`
 6. Place `credentials.json` in the project root
+7. Go to OAuth consent screen in the left sidebar:
+      Set User Type to External
+      Add your Google account(s) under Test users (only these accounts can access the app during testing)
+      Save and continue setup
+   ⚠️ Note: If you don’t add your Gmail account as a test user, OAuth authentication will fail with an “Access blocked” or “Unauthorized user” error.
 
 ### 4. Set Up Environment Variables
 
