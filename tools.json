@@ -1,0 +1,25 @@
+[
+  {
+    "name": "assistant_gmail",
+    "description": "Crée un brouillon et envoie un email via Gmail pour un utilisateur",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "nom_utilisateur": {
+          "type": "string",
+          "description": "Nom du destinataire dans le fichier Excel"
+        },
+        "contenu": {
+          "type": "string",
+          "description": "Contenu du message"
+        },
+        "envoyer": {
+          "type": "boolean",
+          "description": "Envoyer l’email (true) ou non (false)"
+        }
+      },
+      "required": ["nom_utilisateur", "contenu"]
+    },
+    "run": "python \"email_assistant.py\" {{nom_utilisateur}} \"{{contenu}}\" {{envoyer}}"
+  }
+]

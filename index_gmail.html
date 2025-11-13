@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Assistant</title>
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+        body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #E07E0E, #764BA2); min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;}
+        .stars {position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
+        .star {position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: twinkle 3s infinite ease-in-out alternate;}
+        @keyframes twinkle {0% { opacity: 0.3; } 100% { opacity: 1; }}
+        .container {width: 90%; max-width: 800px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); position: relative; z-index: 1;}
+        .header {display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;}
+        .logo-section {display: flex; align-items: center; gap: 15px;}
+        .logo {width: 50px; height: 50px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #dda05a;}
+        .title-section h1 {color: white; font-size: 28px; font-weight: 700; margin-bottom: 5px;}
+        .title-section p {color: rgba(255, 255, 255, 0.6); font-size: 14px;}
+        .welcome-message {background: rgba(255, 255, 255, 0.15); padding: 25px; border-radius: 15px; margin-bottom: 30px; border: 1px solid rgba(255, 255, 255, 0.2);}
+        .welcome-message p {color: white; font-size: 18px; line-height: 1.6;}
+        .chat-area {background: rgba(0, 0, 0, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 20px; height: 400px; max-height: 400px; overflow-y: auto; border: 1px solid rgba(255, 255, 255, 0.1); scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.3) transparent;}
+        .chat-area::-webkit-scrollbar {width: 8px;}
+        .chat-area::-webkit-scrollbar-track {background: rgba(255, 255, 255, 0.1); border-radius: 10px;}
+        .chat-area::-webkit-scrollbar-thumb {background: rgba(255, 255, 255, 0.3); border-radius: 10px;}
+        .chat-area::-webkit-scrollbar-thumb:hover {background: rgba(255, 255, 255, 0.5);}
+        .quick-actions {display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;}
+        .action-btn {background: #E07E0E; color: white; padding: 12px 20px; border: none; border-radius: 25px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.2);}
+        .action-btn:hover {background: #dda05a; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);}
+        .input-section {display: flex; gap: 10px; margin-bottom: 15px;}
+        .message-input {flex: 1; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px; padding: 15px 20px; color: white; font-size: 16px; outline: none; transition: all 0.3s ease;}
+        .message-input::placeholder {color: rgba(255, 255, 255, 0.6);}
+        .message-input:focus {border-color: #E07E0E; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);}
+        .send-btn {background: #E07E0E; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; color: white; font-size: 18px;}
+        .send-btn:hover {background: #dda05a; transform: scale(1.05);}
+        .demo-notice {color: rgba(255, 255, 255, 0.6); font-size: 14px; text-align: center; margin-top: 10px;}
+        @media (max-width: 768px) {
+            .container {width: 95%; padding: 20px;}
+            .header {flex-direction: column; text-align: center; gap: 15px;}
+            .title-section h1 {font-size: 24px;}
+            .quick-actions {justify-content: center;}
+            .action-btn {padding: 10px 16px; font-size: 13px;}
+        }
+        .container {animation: slideIn 0.8s ease-out;}
+        @keyframes slideIn {from {opacity: 0;transform: translateY(30px);} to {opacity: 1;transform: translateY(0);}}
+
+        /* Mail Confirmation Block Styling */
+        .mail-confirm-block {
+            background: rgba(255,255,255,0.13);
+            padding: 18px 22px;
+            border-radius: 16px;
+            margin: 12px 0;
+            border: 1.5px solid #dda05a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+            color: #212;
+        }
+        .mail-confirm-block h3 { color: #E07E0E; margin-bottom: 8px; }
+        .mail-confirm-block blockquote {
+            background: rgba(255,255,255,0.21);
+            padding: 13px 20px;
+            border-radius: 12px;
+            border-left: 3px solid #E07E0E;
+            margin: 0 0 10px 0;
+        }
+        .mail-confirm-block hr {border:0;border-top:1px solid #eee;}
+        .mail-confirm-block h4 {margin:12px 0 6px 0;}
+
+        .logout-btn {
+            background: #E07E0E;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            margin-left: auto;
+            margin-right: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(76, 75, 162, 0.15);
+            transition: all 0.25s;
+        }
+        .logout-btn:hover {
+            background: #8d520f;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(224, 126, 14, 0.19);
+            transform: translateY(-1px) scale(1.04);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo">✉</div>
+                <div class="title-section">
+                    <h1>Email Assistant</h1>
+                    <p>Rédaction, envoi et analyse d'emails automatisés</p>
+                </div>
+            </div>
+        </div>
+        <div class="welcome-message">
+            <p>Bienvenue dans Email Assistant ! Je peux rédiger, envoyer et analyser vos emails automatiquement. Comment puis-je vous aider aujourd'hui ?</p>
+        </div>
+        <div class="chat-area"></div>
+        <div class="quick-actions">
+            <button class="action-btn" onclick="quickAction('meeting')">Rédiger une demande de réunion</button>
+            <button class="action-btn" onclick="quickAction('followup')">Créer un email de suivi</button>
+            <button class="action-btn" onclick="quickAction('thankyou')">Écrire une note de remerciement</button>
+        </div>
+        <div class="input-section">
+            <input type="text" class="message-input" placeholder="Tapez votre message ici..." id="messageInput">
+            <button class="send-btn" onclick="sendMessage()">→</button>
+        </div>
+        <button class="action-btn logout-btn" onclick="window.location.href='/proxy/Gmail-Chatbot/logout';">
+            Se déconnecter
+        </button>
+    </div>
+    <script>
+        // Animated stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numStars = 100;
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Add a loader spinner to the chat
+        function addLoaderToChat() {
+            const chatArea = document.querySelector('.chat-area');
+            const loaderDiv = document.createElement('div');
+            loaderDiv.className = 'loading-spinner';
+            loaderDiv.style.cssText = `
+                display: flex; align-items: center; margin-bottom: 15px; 
+                background: rgba(255,255,255,0.07); color: #fff; padding: 12px 16px; 
+                border-radius: 15px; max-width: 70%; margin-right: auto;
+                font-size: 17px; letter-spacing: 1px;
+            `;
+            loaderDiv.innerHTML = `
+                <span class="dot-bounce"></span>
+                <span style="margin-left:14px;">Assistant en train de répondre...</span>
+            `;
+            chatArea.appendChild(loaderDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        // Remove loader from chat
+        function removeLoaderFromChat() {
+            const loader = document.querySelector('.loading-spinner');
+            if (loader) loader.remove();
+        }
+
+        // Quick action buttons (fill message input)
+        function quickAction(type) {
+            const messageInput = document.getElementById('messageInput');
+            let message = '';
+            switch(type) {
+                case 'meeting':
+                    message = 'Veuillez m\'aider à rédiger un email de demande de réunion.';
+                    break;
+                case 'followup':
+                    message = 'J\'ai besoin de créer un email de suivi.';
+                    break;
+                case 'thankyou':
+                    message = 'Aidez-moi à écrire une note de remerciement.';
+                    break;
+            }
+            messageInput.value = message;
+            messageInput.focus();
+        }
+
+        // Add a message to the chat area
+        function addMessageToChat(message, sender) {
+            const chatArea = document.querySelector('.chat-area');
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = `
+                margin-bottom: 15px;
+                padding: 12px 16px;
+                border-radius: 15px;
+                max-width: 80%;
+                ${sender === 'user' ? 
+                    'background: #dda05a; color: white; margin-left: auto; text-align: right;' :
+                    'background: rgba(255, 255, 255, 0.1); color: white; margin-right: auto;'
+                }
+            `;
+
+            // NEW: Render HTML for assistant messages (rich mail block), else as text
+            if (sender === 'assistant' && message.trim().startsWith('<div')) {
+                messageDiv.innerHTML = message;
+                // Optional: set background transparent for HTML blocks
+                messageDiv.style.background = 'transparent';
+                messageDiv.style.color = 'inherit';
+                messageDiv.style.padding = '0';
+            } else {
+                messageDiv.textContent = message;
+            }
+
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // Send user message to backend, display assistant response
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessageToChat(message, 'user');
+                messageInput.value = '';
+                addLoaderToChat();
+                fetch('./chat', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({prompt: message})
+                })
+                .then(res => res.json())
+                .then(data => {
+                    removeLoaderFromChat();
+                    if(data.response){
+                        addMessageToChat(data.response, 'assistant');
+                    } else if(data.error){
+                        addMessageToChat("❌ " + data.error, 'assistant');
+                    }
+                })
+                .catch(err => {
+                    removeLoaderFromChat();
+                    addMessageToChat("❌ Server error: " + err, 'assistant');
+                });
+            }
+        }
+
+        // Enter key triggers send
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        const loaderStyle = document.createElement('style');
+        loaderStyle.textContent = `
+            .dot-bounce {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                vertical-align: middle;
+                position: relative;
+            }
+            .dot-bounce:before, .dot-bounce:after {
+                content: '';
+                display: inline-block;
+                position: absolute;
+                left: 0;
+                width: 6px;
+                height: 6px;
+                background: #fff;
+                border-radius: 50%;
+                animation: dotBounce 0.8s infinite alternate;
+            }
+            .dot-bounce:after {
+                left: 10px;
+                animation-delay: 0.4s;
+            }
+            @keyframes dotBounce {
+                0% { top: 7px; opacity: 0.5;}
+                100% { top: 0px; opacity: 1;}
+            }
+        `;
+        document.head.appendChild(loaderStyle);
+
+        createStars();
+    </script>
+</body>
+</html>
