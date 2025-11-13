@@ -39,8 +39,8 @@ An intelligent email management system that uses AI to help you draft, send, ana
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/gmail-chatbot.git
-cd gmail-chatbot
+git clone https://github.com/Albekbashy/Gmail_Chatbot.git
+cd Gmail_Chatbot
 ```
 
 ### 2. Install Dependencies
@@ -123,23 +123,6 @@ Summarize emails about the marketing campaign
 Send an email to Pierre and congratulate him for his exam success
 ```
 
-## 🐳 Docker Deployment (Optional)
-
-### Build the Docker Image
-
-```bash
-docker build -t gmail-chatbot .
-```
-
-### Run the Container
-
-```bash
-docker run -p 5003:5003 \
-  -v $(pwd)/credentials.json:/app/credentials.json \
-  -v $(pwd)/.env:/app/.env \
-  gmail-chatbot
-```
-
 ## 📁 Project Structure
 
 ```
@@ -212,10 +195,6 @@ The application requires the following Gmail API scopes:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 🐛 Troubleshooting
 
 ### OAuth Redirect Issues
@@ -250,7 +229,6 @@ netstat -ano | findstr :5003   # Windows
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `MISTRAL_API_KEY_3` | Your Mistral AI API key | `sk-...` |
-| `FLASK_SECRET_KEY` | Secret key for Flask sessions | `your-secret-key` |
 | `CSV_FILE_PATH` | Path/URL to contacts file | Google Sheets URL |
 | `PORT` | Port to run the server on | `5003` |
 
@@ -297,14 +275,6 @@ For questions or support, please open an issue on GitHub.
 - Flask Framework
 - Python Community
 
-## 📈 Roadmap
-
-- [ ] Add support for attachments
-- [ ] Implement email templates
-- [ ] Add calendar integration
-- [ ] Multi-language support
-- [ ] Voice commands
-- [ ] Mobile app version
 
 ---
 
