@@ -258,7 +258,6 @@ Understands various phrasings:
 ## 🎨 Web Interface
 
 The chatbot includes a modern web interface (`index_gmail.html`) with:
-- Dark theme design
 - Real-time chat interface
 - Formatted email previews
 - Responsive layout
